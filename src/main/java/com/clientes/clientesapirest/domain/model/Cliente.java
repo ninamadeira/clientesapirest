@@ -30,7 +30,7 @@ public class Cliente {
 	private String fone;
 
 	@NotBlank
-	@Size(max = 20)
+	@Size(max = 11)
 	@CPF
 	private String cpf;
 
