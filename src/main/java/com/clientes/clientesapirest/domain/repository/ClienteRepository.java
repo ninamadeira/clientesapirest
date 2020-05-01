@@ -8,8 +8,6 @@ import com.clientes.clientesapirest.domain.model.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-	Cliente findByEmail(String email);
-
-	Cliente findByCpf(String cpf);
+		Cliente findByCpf(String cpf);
 
 }

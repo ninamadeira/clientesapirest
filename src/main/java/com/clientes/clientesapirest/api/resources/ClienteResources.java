@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.clientes.clientesapirest.domain.model.Cliente;
 import com.clientes.clientesapirest.domain.repository.ClienteRepository;
+import com.clientes.clientesapirest.domain.service.ClienteService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +29,14 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/api")
 @Api(value = "API REST Clientes")
 public class ClienteResources {
-	@Autowired
-	private ClienteRepository clienteRepository;
+
+	public ClienteResources(ClienteRepository clienteRepository, ClienteService clienteService) {
+		this.clienteRepository = clienteRepository;
+		this.clienteService = clienteService;
+	}
+
+	ClienteRepository clienteRepository;
+	ClienteService clienteService;
 
 	@ApiOperation(value = "Retorna uma lista de Clientes")
 	@GetMapping("/clientes")
@@ -38,21 +44,21 @@ public class ClienteResources {
 		return clienteRepository.findAll();
 
 	}
-	
+
 	@ApiOperation(value = "Retorna um Cliente")
 	@GetMapping("/clientes/{clienteId}")
 	public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) {
 		return clienteRepository.findById(clienteId).map(cliente -> ResponseEntity.ok().body(cliente))
 				.orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	@ApiOperation(value = "Salva um Cliente")
 	@PostMapping("/clientes")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-		return clienteRepository.save(cliente);
+		return clienteService.salvar(cliente);
 	}
-	
+
 	@ApiOperation(value = "Atualiza um Cliente")
 	@PutMapping("/clientes/{clienteId}")
 	public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteId, @RequestBody @Valid Cliente cliente) {
@@ -61,7 +67,7 @@ public class ClienteResources {
 			clienteRegistro.setEmail(cliente.getEmail());
 			clienteRegistro.setFone(cliente.getFone());
 			clienteRegistro.setCpf(cliente.getCpf());
-			Cliente clienteAtualizado = clienteRepository.save(clienteRegistro);
+			Cliente clienteAtualizado = clienteService.salvar(clienteRegistro);
 			return ResponseEntity.ok().body(clienteAtualizado);
 		}).orElse(ResponseEntity.notFound().build());
 	}
@@ -73,8 +79,7 @@ public class ClienteResources {
 			return ResponseEntity.notFound().build();
 		}
 
-		clienteRepository.deleteById(clienteId);;
-
+		clienteService.excluir(clienteId);
 		return ResponseEntity.noContent().build();
 	}
 
