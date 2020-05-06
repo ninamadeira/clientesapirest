@@ -2,15 +2,17 @@ package com.clientes.clientesapirest.api.config;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,19 +22,26 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 	@Bean
 	public Docket productApi() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.clientes.clientesapirest")).paths(regex("/api.*")).build()
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+					.apis(RequestHandlerSelectors.basePackage("com.clientes.clientesapirest"))
+					.paths(regex("/api.*"))
+					.build()
 				.apiInfo(metaInfo());
+		
 	}
 
 	private ApiInfo metaInfo() {
+        return new ApiInfoBuilder()
+                .title("Clientes API REST")
+                .description("API REST de cadastro de clientes.")
+                .version("1.0")
+                .contact(new Contact("Nina Madeira", "", "nina.madeira@gmail.com"))
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licesen.html")
+                .build();
 
-		ApiInfo apiInfo = new ApiInfo("Clientes API REST", "API REST de cadastro de clientes.", "1.0",
-				"Terms of Service",
-				new Contact("Nina Rosa Madeira","", "nina.madeira@gmail.com"),
-				"Apache License Version 2.0", "https://www.apache.org/licesen.html", new ArrayList<VendorExtension>());
 
-		return apiInfo;
-	}
+    }
 
 }
