@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,14 +30,16 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/api")
 @Api(value = "API REST Clientes")
 public class ClienteResources {
-
+	ClienteRepository clienteRepository;
+	ClienteService clienteService;
+	
+    @Autowired
 	public ClienteResources(ClienteRepository clienteRepository, ClienteService clienteService) {
 		this.clienteRepository = clienteRepository;
 		this.clienteService = clienteService;
 	}
 
-	ClienteRepository clienteRepository;
-	ClienteService clienteService;
+	
 
 	@ApiOperation(value = "Retorna uma lista de Clientes")
 	@GetMapping("/clientes")

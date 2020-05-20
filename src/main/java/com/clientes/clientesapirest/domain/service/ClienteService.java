@@ -1,5 +1,6 @@
 package com.clientes.clientesapirest.domain.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.clientes.clientesapirest.domain.exception.NegocioException;
@@ -10,7 +11,8 @@ import com.clientes.clientesapirest.domain.repository.ClienteRepository;
 public class ClienteService {
 
 	ClienteRepository clienteRepository;
-
+	
+    @Autowired
 	public ClienteService(ClienteRepository clienteRepository) {
 		this.clienteRepository = clienteRepository;
 	}
